@@ -56,7 +56,6 @@ This only matters for local dev. The shared Render Postgres environment should g
 ## What's stubbed vs. real
 
 - **KYC verification** is a real manual admin-approval flow (queue → approve/reject), not auto-approved. NIN/BVN/selfie values are stored but not checked against a real government API — that's the explicitly-deferred piece per the PRD.
-- **ALATPay** (`app/services/alatpay_service.py`) returns fake checkout URLs/references. Swap the function bodies for real ALATPay API calls when sandbox credentials are ready — nothing else in the app needs to change.
 - **Contributions and payouts** are internal wallet ledger movements only — no ALATPay call needed for those, since the money's already inside the platform.
  .env              # defaults to a local SQLite file, no setup needed
 python seed.py                    # creates 3 demo users (PIN: 1234) + 1 demo circle

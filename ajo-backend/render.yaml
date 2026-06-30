@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: ajo-api
+    runtime: python
+    plan: free
+    buildCommand: cd ajo-backend && pip install --upgrade pip setuptools wheel && pip install -r requirements.txt
+    startCommand: cd ajo-backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: ajo-db
+          property: connectionString
+      - key: JWT_SECRET
+        sync: false
+      - key: ADMIN_PHONES
+        sync: false
+      - key: NOMBA_BASE_URL
+        sync: false
+      - key: NOMBA_ACCOUNT_ID
+        sync: false
+      - key: NOMBA_SUBACCOUNT_ID
+        sync: false
+      - key: NOMBA_CLIENT_ID
+        sync: false
+      - key: NOMBA_CLIENT_SECRET
+        sync: false
+      - key: NOMBA_WEBHOOK_SIGNATURE_KEY
+        sync: false
