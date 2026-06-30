@@ -139,6 +139,17 @@ class InviteStatus(str, enum.Enum):
     expired = "expired"
 
 
+class NombaTransactionStatus(str, enum.Enum):
+    pending = "PENDING"
+    successful = "SUCCESSFUL"
+    failed = "FAILED"
+
+
+class NombaTransactionType(str, enum.Enum):
+    contribution = "contribution"
+    payout = "payout"
+
+
 class Circle(Base):
     __tablename__ = "circles"
 
@@ -155,6 +166,8 @@ class Circle(Base):
     current_turn_index = Column(Integer, default=0)
     total_saved = Column(Float, default=0)
     created_at = Column(DateTime, default=datetime.utcnow)
+    nomba_account_ref = Column(String(120), nullable=True)
+    nomba_account_number = Column(String(20), nullable=True)
 
     creator = relationship("User", back_populates="circles_created")
     memberships = relationship("Membership", back_populates="circle")
@@ -259,3 +272,22 @@ class Notification(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
     user = relationship("User", back_populates="notifications")
+
+
+class NombaTransaction(Base):
+    """Ledger for all Nomba-side money movements — the reconciliation
+    source of truth. Every contribution and payout that touches Nomba
+    gets a row here before the call, and the webhook updates the status."""
+
+    __tablename__ = "nomba_transactions"
+
+    id = Column(Integer, primary_key=True)
+    merchant_tx_ref = Column(String(120), unique=True, nullable=False, index=True)
+    nomba_transaction_id = Column(String(120), nullable=True)
+    type = Column(Enum(NombaTransactionType), nullable=False)
+    circle_id = Column(Integer, ForeignKey("circles.id"), nullable=True)
+    amount = Column(Float, nullable=False)
+    status = Column(Enum(NombaTransactionStatus), default=NombaTransactionStatus.pending)
+    raw_response = Column(Text, nullable=True)  # JSON dump of Nomba's response
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

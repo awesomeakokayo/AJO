@@ -5,9 +5,9 @@ from typing import Optional
 import bcrypt
 from jose import JWTError, jwt
 
-JWT_SECRET = os.getenv("JWT_SECRET", "dev-secret-change-me-before-sharing-the-render-url")
+JWT_SECRET = os.getenv("JWT_SECRET")
 JWT_ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7  # 7 days — fine for a buildathon, tighten later
+ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7  # 7 days — for the buildathon, we'd tighten later
 
 
 def hash_pin(pin: str) -> str:

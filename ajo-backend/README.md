@@ -23,9 +23,7 @@ The only thing connecting the two slices is `user_id` (a plain foreign key — t
 python -m venv venv
 source venv/bin/activate          # venv\Scripts\activate on Windows
 pip install -r requirements.txt
-cp .env.example .env              # defaults to a local SQLite file, no setup needed
-python seed.py                    # creates 3 demo users (PIN: 1234) + 1 demo circle
-uvicorn app.main:app --reload
+cp .env.example
 ```
 
 Then open `http://127.0.0.1:8000/docs` — every endpoint is testable from there. Log in via `/auth/login`, click "Authorize" in the top right with the returned token, and you've got an authenticated session for every other endpoint, regardless of who owns it.
@@ -60,3 +58,6 @@ This only matters for local dev. The shared Render Postgres environment should g
 - **KYC verification** is a real manual admin-approval flow (queue → approve/reject), not auto-approved. NIN/BVN/selfie values are stored but not checked against a real government API — that's the explicitly-deferred piece per the PRD.
 - **ALATPay** (`app/services/alatpay_service.py`) returns fake checkout URLs/references. Swap the function bodies for real ALATPay API calls when sandbox credentials are ready — nothing else in the app needs to change.
 - **Contributions and payouts** are internal wallet ledger movements only — no ALATPay call needed for those, since the money's already inside the platform.
+ .env              # defaults to a local SQLite file, no setup needed
+python seed.py                    # creates 3 demo users (PIN: 1234) + 1 demo circle
+uvicorn app.main:app --reload

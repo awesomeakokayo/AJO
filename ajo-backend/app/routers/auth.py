@@ -11,7 +11,7 @@ from app.security import create_access_token, hash_pin, verify_pin
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 # Comma-separated phone numbers that get is_admin=True on signup, e.g.
-# "08010000001,08010000002". Sprint-friendly way to bootstrap an admin
+# "08010000001,08010000002". Sample numbers for sprint to bootstrap an admin
 # account without a separate promote-to-admin endpoint.
 ADMIN_PHONES = {p.strip() for p in os.getenv("ADMIN_PHONES", "").split(",") if p.strip()}
 

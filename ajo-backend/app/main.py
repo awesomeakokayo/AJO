@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.database import Base, engine
-from app.routers import admin, auth, circles, invites, notifications, users, wallet
+from app.routers import admin, auth, circles, invites, nomba_webhooks, notifications, users, wallet
 
 # Sprint speed: create tables directly instead of running migrations.
 # If you change a model's columns, drop ajo.db locally and re-run seed.py
@@ -28,6 +28,9 @@ app.include_router(circles.router)
 app.include_router(wallet.router)
 app.include_router(invites.router)
 app.include_router(notifications.router)
+
+# Nomba Payments integration router
+app.include_router(nomba_webhooks.router)
 
 
 @app.get("/")
